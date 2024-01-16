@@ -73,6 +73,8 @@ const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
 
   const [title, onChangeTitle] = React.useState('Example title text');
 
+  const onPress = () => console.log('PRESSED!', newListItems?.tasks);
+
   if (!newListItems) return null;
   return (
     <CreateView>
@@ -105,7 +107,7 @@ const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
             size={26}
           />
         </AddButton>
-        <Button>
+        <Button onPress={onPress}>
           <ButtonText>Submit Form</ButtonText>
         </Button>
       </ScrollView>

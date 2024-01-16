@@ -10,8 +10,14 @@ const InputField = styled.TextInput`
   background-color: white;
 `;
 
-export default function UserInput() {
-  const [text, onChangeText] = React.useState('Example text');
-
-  return <InputField onChangeText={onChangeText} value={text} />;
+export default function UserInput({
+  text,
+  setText,
+}: {
+  text: string;
+  setText: any;
+}) {
+  return (
+    <InputField onChangeText={(text: string) => setText(text)} value={text} />
+  );
 }

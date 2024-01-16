@@ -1,6 +1,6 @@
 import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
 
 import UserInput from './UserInput';
@@ -46,6 +46,18 @@ const ItemView = styled.View`
 export default function CreateItem({index, id}: {index: number; id: string}) {
   const {deleteListItem} = useListContext();
 
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [assignee, setAssignee] = useState('');
+
+  const checkText = () => {
+    console.log(name);
+    console.log(description);
+    console.log(assignee);
+  };
+
+  checkText();
+
   return (
     <>
       <ItemHeaderView>
@@ -67,19 +79,19 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
         <ItemText>Task Name</ItemText>
       </ItemView>
       <ItemView>
-        <UserInput />
+        <UserInput text={name} setText={setName} />
       </ItemView>
       <ItemView>
         <ItemText>Task Description</ItemText>
       </ItemView>
       <ItemView>
-        <UserInput />
+        <UserInput text={description} setText={setDescription} />
       </ItemView>
       <ItemView>
         <ItemText>Assignee</ItemText>
       </ItemView>
       <ItemView>
-        <UserInput />
+        <UserInput text={assignee} setText={setAssignee} />
       </ItemView>
     </>
   );
