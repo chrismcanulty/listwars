@@ -65,7 +65,18 @@ export type ListContent = {
   getListItems: () => void;
   getNewListItems: () => void;
   addNewListItem: () => void;
-  deleteListItem: (index: number) => void;
+  deleteListItem: (id: number) => void;
+  modifyTasks: ({
+    id,
+    name,
+    description,
+    assignee,
+  }: {
+    id: string;
+    name: string;
+    description: string;
+    assignee: string;
+  }) => void;
   listCleared: boolean;
   setListCleared: Dispatch<SetStateAction<boolean>>;
   checkListCleared: (arr: List) => void;
@@ -104,6 +115,7 @@ export const MyListContext = createContext<ListContent>({
   getNewListItems: () => {},
   addNewListItem: () => {},
   deleteListItem: () => {},
+  modifyTasks: () => {},
   listCleared: false,
   setListCleared: () => {},
   checkListCleared: () => {},
@@ -154,6 +166,41 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
       setNewListItems(newList);
     }
   }, []);
+
+  const modifyTasks = useCallback(
+    ({
+      id,
+      name,
+      description,
+      assignee,
+    }: {
+      id: string;
+      name: string;
+      description: string;
+      assignee: string;
+    }) => {
+      const tempList = {...newListItems};
+      const task = {
+        id: id,
+        title: name,
+        details: description,
+        whodunnit: assignee,
+        status: 'incomplete',
+      };
+
+      // let index = tempList.tasks?.findIndex(x => Number(x.id) === Number(id));
+
+      if (Number(id) > -1) {
+        const oldDetails = tempList.tasks?.find(id => id === id);
+        oldDetails && Object.assign(oldDetails, task);
+      }
+      if (newListItems) {
+        setNewListItems(tempList);
+      }
+      console.log(newListItems);
+    },
+    [],
+  );
 
   const listClickComplete = useCallback(
     async (i: string) => {
@@ -219,6 +266,7 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
       setNewListItems,
       addNewListItem,
       deleteListItem,
+      modifyTasks,
     }),
     [
       listItems,
@@ -234,6 +282,7 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
       setNewListItems,
       addNewListItem,
       deleteListItem,
+      modifyTasks,
     ],
   );
 

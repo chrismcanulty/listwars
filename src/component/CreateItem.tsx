@@ -1,6 +1,6 @@
 import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 
 import UserInput from './UserInput';
@@ -44,19 +44,23 @@ const ItemView = styled.View`
 `;
 
 export default function CreateItem({index, id}: {index: number; id: string}) {
-  const {deleteListItem} = useListContext();
+  const {deleteListItem, modifyTasks} = useListContext();
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [assignee, setAssignee] = useState('');
 
-  const checkText = () => {
-    console.log(name);
-    console.log(description);
-    console.log(assignee);
-  };
+  // data state should be passed from parent component CreateScreen
 
-  checkText();
+  // CreateTask function should modify the state of a given task
+  // based on the task id. The state should be tracked in context
+  // so it's available in the parent component
+  // the context function should modify the contents of newlistitems
+
+  useEffect(() => {
+    modifyTasks({id, name, description, assignee});
+    console.log('testpika');
+  }, [name, description, assignee]);
 
   return (
     <>
