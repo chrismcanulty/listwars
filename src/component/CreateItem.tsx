@@ -70,21 +70,8 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
   const [description, setDescription] = useState('');
   const [assignee, setAssignee] = useState('');
 
-  // data state should be passed from parent component CreateScreen
-
-  // CreateTask function should modify the state of a given task
-  // based on the task id. The state should be tracked in context
-  // so it's available in the parent component
-  // the context function should modify the contents of newlistitems
-
-  // useEffect(() => {
-  //   modifyTasks({id, name, description, assignee});
-  //   console.log('testpika', newListItems, id);
-  // }, [id, name, description, assignee]);
-
   const onPress = () => {
     modifyTasks({id, name, description, assignee});
-    console.log('lalala', newListItems?.tasks);
   };
 
   return (
@@ -93,16 +80,18 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
         <ItemText style={{fontSize: 20}}>
           Task #{index + 1} ID #{id}
         </ItemText>
-        <DeleteButton
-          onPress={() => {
-            deleteListItem(Number(id));
-          }}>
-          <FontAwesomeIcon
-            icon={faTrash}
-            style={{color: LIST_COLOR}}
-            size={20}
-          />
-        </DeleteButton>
+        {newListItems && newListItems.tasks?.length > 1 && (
+          <DeleteButton
+            onPress={() => {
+              deleteListItem(Number(id));
+            }}>
+            <FontAwesomeIcon
+              icon={faTrash}
+              style={{color: LIST_COLOR}}
+              size={20}
+            />
+          </DeleteButton>
+        )}
       </ItemHeaderView>
       <ItemView>
         <ItemText>Task Name</ItemText>
