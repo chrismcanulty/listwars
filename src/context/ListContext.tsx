@@ -187,20 +187,23 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
     }) => {
       const tempList = {...newListItems};
       const task = {
+        id,
         title: name,
         details: description,
         whodunnit: assignee,
         status: 'incomplete',
       };
 
-      // const index = tempList.tasks?.findIndex(x => Number(x.id) === Number(id));
-
       console.log('modifypika', newListItems);
 
-      if (Number(id) > -1) {
-        const oldDetails = tempList.tasks?.find(id => id === id);
-        oldDetails && Object.assign(oldDetails, task);
-      }
+      // if (Number(id) > -1) {
+      //   const oldDetails = tempList.tasks?.find(id => id === id);
+      //   oldDetails && Object.assign(oldDetails, task);
+      // }
+
+      const index = tempList.tasks?.findIndex(x => Number(x.id) === Number(id));
+      tempList.tasks[index] = task;
+
       if (newListItems) {
         setNewListItems(tempList);
       }

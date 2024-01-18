@@ -64,7 +64,7 @@ const ItemView = styled.View`
 `;
 
 export default function CreateItem({index, id}: {index: number; id: string}) {
-  const {deleteListItem, modifyTasks} = useListContext();
+  const {deleteListItem, modifyTasks, newListItems} = useListContext();
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -84,7 +84,7 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
 
   const onPress = () => {
     modifyTasks({id, name, description, assignee});
-    console.log('id?', id);
+    console.log('lalala', newListItems?.tasks);
   };
 
   return (
