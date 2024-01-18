@@ -36,6 +36,16 @@ const DeleteButton = styled.TouchableOpacity`
   border-radius: 6px;
 `;
 
+const ItemFinalizedText = styled.TextInput`
+  color: ${LIST_COLOR};
+  flex: 1;
+  font-family: Montserrat-Regular;
+  font-size: 20px;
+  height: 40px;
+  border-width: 1;
+  padding: 10px;
+`;
+
 const ItemText = styled.Text`
   font-family: Montserrat-Regular;
   font-size: 18px;
@@ -69,9 +79,30 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [assignee, setAssignee] = useState('');
+  const [finalizeTask, setFinalizeTask] = useState(false);
+  const [error, setError] = useState(false);
+
+  const errorCheck = () => {
+    if (
+      name.length < 2 ||
+      name.length > 30 ||
+      description.length < 2 ||
+      description.length > 30 ||
+      assignee.length < 2 ||
+      assignee.length > 30
+    ) {
+      setError(true);
+      return error;
+    }
+  };
 
   const onPress = () => {
-    modifyTasks({id, name, description, assignee});
+    errorCheck();
+    console.log('errorcheck', error);
+    if (!error) {
+      modifyTasks({id, name, description, assignee});
+      setFinalizeTask(true);
+    }
   };
 
   return (
@@ -93,27 +124,60 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
           </DeleteButton>
         )}
       </ItemHeaderView>
-      <ItemView>
-        <ItemText>Task Name</ItemText>
-      </ItemView>
-      <ItemView>
-        <UserInput text={name} setText={setName} />
-      </ItemView>
-      <ItemView>
-        <ItemText>Task Description</ItemText>
-      </ItemView>
-      <ItemView>
-        <UserInput text={description} setText={setDescription} />
-      </ItemView>
-      <ItemView>
-        <ItemText>Assignee</ItemText>
-      </ItemView>
-      <ItemView>
-        <UserInput text={assignee} setText={setAssignee} />
-      </ItemView>
-      <Button onPress={onPress}>
-        <ButtonText>Set Task</ButtonText>
-      </Button>
+      {!finalizeTask && (
+        <>
+          <ItemView>
+            <ItemText>Task Name</ItemText>
+          </ItemView>
+          <ItemView>
+            <UserInput text={name} setText={setName} />
+          </ItemView>
+          <ItemView>
+            <ItemText>Task Description</ItemText>
+          </ItemView>
+          <ItemView>
+            <UserInput text={description} setText={setDescription} />
+          </ItemView>
+          <ItemView>
+            <ItemText>Assignee</ItemText>
+          </ItemView>
+          <ItemView>
+            <UserInput text={assignee} setText={setAssignee} />
+          </ItemView>
+          <Button onPress={onPress}>
+            <ButtonText>Set Task</ButtonText>
+          </Button>
+          {error && (
+            <ItemView>
+              <ItemText>
+                Please enter between 2 and 30 characters in each field
+              </ItemText>
+            </ItemView>
+          )}
+        </>
+      )}
+      {finalizeTask && (
+        <>
+          <ItemView>
+            <ItemText>Task Name</ItemText>
+          </ItemView>
+          <ItemView>
+            <ItemFinalizedText>{name}</ItemFinalizedText>
+          </ItemView>
+          <ItemView>
+            <ItemText>Task Description</ItemText>
+          </ItemView>
+          <ItemView>
+            <ItemFinalizedText>{description}</ItemFinalizedText>
+          </ItemView>
+          <ItemView>
+            <ItemText>Assignee</ItemText>
+          </ItemView>
+          <ItemView style={{marginBottom: 30}}>
+            <ItemFinalizedText>{assignee}</ItemFinalizedText>
+          </ItemView>
+        </>
+      )}
     </>
   );
 }
