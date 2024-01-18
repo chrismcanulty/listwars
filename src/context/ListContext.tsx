@@ -137,12 +137,15 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
   }, []);
 
   const getNewListItems = useCallback(() => {
-    setNewListItems(DefaultList);
+    setNewListItems(newListItems);
   }, []);
 
   const addNewListItem = useCallback(() => {
-    const newList = {...DefaultList};
-    const newId = Number(newList.tasks[newList.tasks.length - 1].id) + 1;
+    const newList = {...newListItems};
+    let newId = 0;
+    if (newList.tasks) {
+      newId = Number(newList.tasks[newList.tasks.length - 1].id) + 1;
+    }
     const newItem = {
       id: `${newId}`,
       title: '',
@@ -150,7 +153,10 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
       whodunnit: '',
       status: '',
     };
-    newList.tasks.push(newItem);
+    if (newId > 0) {
+      newList.tasks?.push(newItem);
+      console.log('addlistitempika', newList);
+    }
     setNewListItems(newList);
   }, []);
 
@@ -181,14 +187,15 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
     }) => {
       const tempList = {...newListItems};
       const task = {
-        id: id,
         title: name,
         details: description,
         whodunnit: assignee,
         status: 'incomplete',
       };
 
-      // let index = tempList.tasks?.findIndex(x => Number(x.id) === Number(id));
+      // const index = tempList.tasks?.findIndex(x => Number(x.id) === Number(id));
+
+      console.log('modifypika', newListItems);
 
       if (Number(id) > -1) {
         const oldDetails = tempList.tasks?.find(id => id === id);
@@ -197,7 +204,6 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
       if (newListItems) {
         setNewListItems(tempList);
       }
-      console.log(newListItems);
     },
     [],
   );

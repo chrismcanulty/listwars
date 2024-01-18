@@ -1,12 +1,32 @@
 import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
 
 import UserInput from './UserInput';
 import {LIST_COLOR} from '../constants';
 import {useListContext} from '../context/ListContext';
 
+const Button = styled.TouchableOpacity`
+  background: white;
+  border-radius: 10px;
+  color: white;
+  display: inline-block;
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-top: 30px;
+  margin-bottom: 0px;
+  opacity: 0.8;
+`;
+const ButtonText = styled.Text`
+  color: black;
+  font-family: 'Montserrat_Regular';
+  font-size: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px;
+  text-align: center;
+`;
 const DeleteButton = styled.TouchableOpacity`
   background-color: #303030;
   height: 40px;
@@ -57,10 +77,15 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
   // so it's available in the parent component
   // the context function should modify the contents of newlistitems
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   modifyTasks({id, name, description, assignee});
+  //   console.log('testpika', newListItems, id);
+  // }, [id, name, description, assignee]);
+
+  const onPress = () => {
     modifyTasks({id, name, description, assignee});
-    console.log('testpika');
-  }, [name, description, assignee]);
+    console.log('id?', id);
+  };
 
   return (
     <>
@@ -97,6 +122,9 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
       <ItemView>
         <UserInput text={assignee} setText={setAssignee} />
       </ItemView>
+      <Button onPress={onPress}>
+        <ButtonText>Set Task</ButtonText>
+      </Button>
     </>
   );
 }

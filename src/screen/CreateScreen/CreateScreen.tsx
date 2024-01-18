@@ -73,7 +73,7 @@ const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
 
   const [title, onChangeTitle] = React.useState('Example title text');
 
-  const onPress = () => console.log('PRESSED!', newListItems?.tasks);
+  const onPress = () => console.log('halloweenpressed!', newListItems?.tasks);
 
   if (!newListItems) return null;
   return (
