@@ -165,7 +165,12 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
 
     const index = newList.tasks?.findIndex(x => Number(x.id) === Number(id));
 
-    if (Number(id) > -1 && typeof index !== 'undefined') {
+    if (
+      Number(id) > -1 &&
+      typeof index !== 'undefined' &&
+      newList.tasks &&
+      newList.tasks.length > 1
+    ) {
       newList.tasks?.splice(index, 1);
       console.log('firstitem');
     }
