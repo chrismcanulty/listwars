@@ -69,11 +69,12 @@ const ItemView = styled.View`
 // should only show trash icon when there is more than one list item
 
 const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
-  const {addNewListItem, newListItems} = useListContext();
+  const {addNewListItem, newListItems, finalizedTasks} = useListContext();
 
   const [title, onChangeTitle] = React.useState('Example title text');
 
-  const onPress = () => console.log('halloweenpressed!', newListItems?.tasks);
+  const onPress = () =>
+    console.log('submititems', newListItems?.tasks, finalizedTasks);
 
   if (!newListItems) return null;
   return (

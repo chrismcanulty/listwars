@@ -1,6 +1,6 @@
 import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 
 import UserInput from './UserInput';
@@ -85,14 +85,32 @@ const ItemView = styled.View`
 `;
 
 export default function CreateItem({index, id}: {index: number; id: string}) {
-  const {deleteListItem, modifyTasks, newListItems} = useListContext();
+  const {
+    deleteListItem,
+    modifyTasks,
+    newListItems,
+    finalizedTasks,
+    setFinalizedTasks,
+  } = useListContext();
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [assignee, setAssignee] = useState('');
   const [finalizeTask, setFinalizeTask] = useState(false);
   const [formError, setFormError] = useState(false);
+
   let error = false;
+
+  function ensure<T>(
+    argument: T | undefined | null,
+    message: string = 'This value was promised to be there.',
+  ): T {
+    if (argument === undefined || argument === null) {
+      throw new TypeError(message);
+    }
+
+    return argument;
+  }
 
   const errorCheck = () => {
     if (
@@ -106,12 +124,13 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
       error = true;
       setFormError(true);
     } else {
+      const tempTasks = [...finalizedTasks];
+      ensure(tempTasks.find(x => x.id === id)).finalized = true;
+      // console.log('ensure', finalizedTasks);
+      setFinalizedTasks(tempTasks);
       error = false;
       setFormError(false);
     }
-    // console.log('namelength', name.length);
-    // console.log('desclength', description.length);
-    // console.log('assigneelength', assignee.length);
   };
 
   const onPress = () => {
@@ -122,15 +141,26 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
     }
   };
 
+  const deleteFinalizedItem = () => {
+    const index = finalizedTasks.findIndex(x => Number(x.id) === Number(id));
+    finalizedTasks.splice(index, 1);
+  };
+
+  useEffect(() => {
+    const tempTasks = [...finalizedTasks];
+    if (!tempTasks.find(x => x.id === id))
+      tempTasks.push({id: id, finalized: false});
+    setFinalizedTasks(tempTasks);
+  }, []);
+
   return (
     <>
       <ItemHeaderView>
-        <ItemText style={{fontSize: 20}}>
-          Task #{index + 1} ID #{id}
-        </ItemText>
+        <ItemText style={{fontSize: 20}}>Task #{index + 1}</ItemText>
         {newListItems && newListItems.tasks?.length > 1 && (
           <DeleteButton
             onPress={() => {
+              deleteFinalizedItem();
               deleteListItem(Number(id));
             }}>
             <FontAwesomeIcon
@@ -141,7 +171,7 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
           </DeleteButton>
         )}
       </ItemHeaderView>
-      {!error && (
+      {!finalizeTask && (
         <>
           <ItemView>
             <ItemText>Task Name</ItemText>

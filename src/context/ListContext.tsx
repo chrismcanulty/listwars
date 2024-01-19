@@ -79,6 +79,10 @@ export type ListContent = {
   }) => void;
   listCleared: boolean;
   setListCleared: Dispatch<SetStateAction<boolean>>;
+  finalizedTasks: {id: string; finalized: boolean}[];
+  setFinalizedTasks: Dispatch<
+    SetStateAction<{id: string; finalized: boolean}[]>
+  >;
   checkListCleared: (arr: List) => void;
   listClickComplete: (i: string) => void;
   listWinner: (arr: List) => void;
@@ -109,6 +113,8 @@ export const MyListContext = createContext<ListContent>({
       },
     ],
   },
+  finalizedTasks: [],
+  setFinalizedTasks: () => {},
   setListItems: () => {},
   setNewListItems: () => {},
   getListItems: () => {},
@@ -130,6 +136,10 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
   const [listCleared, setListCleared] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState<unknown>(null);
+  const [finalizedTasks, setFinalizedTasks] = useState<
+    ListContent['finalizedTasks']
+  >([]);
+
   const tempData = {...Data};
 
   const getListItems = useCallback(() => {
@@ -155,14 +165,12 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
     };
     if (newId > 0) {
       newList.tasks?.push(newItem);
-      console.log('addlistitempika', newList);
     }
     setNewListItems(newList);
   }, []);
 
   const deleteListItem = useCallback((id: string) => {
     const newList = {...newListItems};
-
     const index = newList.tasks?.findIndex(x => Number(x.id) === Number(id));
 
     if (
@@ -172,7 +180,6 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
       newList.tasks.length > 1
     ) {
       newList.tasks?.splice(index, 1);
-      console.log('firstitem');
     }
     if (newListItems) {
       setNewListItems(newList);
@@ -199,13 +206,6 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
         whodunnit: assignee,
         status: 'incomplete',
       };
-
-      console.log('modifypika', newListItems);
-
-      // if (Number(id) > -1) {
-      //   const oldDetails = tempList.tasks?.find(id => id === id);
-      //   oldDetails && Object.assign(oldDetails, task);
-      // }
 
       const index = tempList.tasks?.findIndex(x => Number(x.id) === Number(id));
       tempList.tasks[index] = task;
@@ -282,6 +282,8 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
       addNewListItem,
       deleteListItem,
       modifyTasks,
+      finalizedTasks,
+      setFinalizedTasks,
     }),
     [
       listItems,
@@ -298,6 +300,8 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
       addNewListItem,
       deleteListItem,
       modifyTasks,
+      finalizedTasks,
+      setFinalizedTasks,
     ],
   );
 
