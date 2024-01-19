@@ -35,7 +35,17 @@ const DeleteButton = styled.TouchableOpacity`
   justify-content: center;
   border-radius: 6px;
 `;
-
+const ErrorText = styled.Text`
+  font-family: Montserrat-Regular;
+  font-size: 16px;
+  font-weight: 500;
+  color: red;
+  position: absolute;
+`;
+const ErrorView = styled.View`
+  align-items: center;
+  position: relative;
+`;
 const ItemFinalizedText = styled.TextInput`
   color: ${LIST_COLOR};
   flex: 1;
@@ -44,6 +54,7 @@ const ItemFinalizedText = styled.TextInput`
   height: 40px;
   border-width: 1;
   padding: 10px;
+  position: absolute;
 `;
 
 const ItemText = styled.Text`
@@ -80,7 +91,8 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
   const [description, setDescription] = useState('');
   const [assignee, setAssignee] = useState('');
   const [finalizeTask, setFinalizeTask] = useState(false);
-  const [error, setError] = useState(false);
+  const [formError, setFormError] = useState(false);
+  let error = false;
 
   const errorCheck = () => {
     if (
@@ -91,14 +103,19 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
       assignee.length < 2 ||
       assignee.length > 30
     ) {
-      setError(true);
-      return error;
+      error = true;
+      setFormError(true);
+    } else {
+      error = false;
+      setFormError(false);
     }
+    // console.log('namelength', name.length);
+    // console.log('desclength', description.length);
+    // console.log('assigneelength', assignee.length);
   };
 
   const onPress = () => {
     errorCheck();
-    console.log('errorcheck', error);
     if (!error) {
       modifyTasks({id, name, description, assignee});
       setFinalizeTask(true);
@@ -124,7 +141,7 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
           </DeleteButton>
         )}
       </ItemHeaderView>
-      {!finalizeTask && (
+      {!error && (
         <>
           <ItemView>
             <ItemText>Task Name</ItemText>
@@ -144,16 +161,16 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
           <ItemView>
             <UserInput text={assignee} setText={setAssignee} />
           </ItemView>
+          {formError && (
+            <ErrorView>
+              <ErrorText>
+                Please enter 2 - 30 characters in all fields
+              </ErrorText>
+            </ErrorView>
+          )}
           <Button onPress={onPress}>
             <ButtonText>Set Task</ButtonText>
           </Button>
-          {error && (
-            <ItemView>
-              <ItemText>
-                Please enter between 2 and 30 characters in each field
-              </ItemText>
-            </ItemView>
-          )}
         </>
       )}
       {finalizeTask && (
