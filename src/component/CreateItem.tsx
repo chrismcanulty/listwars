@@ -50,8 +50,7 @@ const ItemFinalizedText = styled.TextInput`
   color: ${LIST_COLOR};
   flex: 1;
   font-family: Montserrat-Regular;
-  font-size: 20px;
-  height: 40px;
+  font-size: 18px;
   border-width: 1;
   padding: 10px;
   position: absolute;

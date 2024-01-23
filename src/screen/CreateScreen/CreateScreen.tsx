@@ -73,8 +73,15 @@ const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
 
   const [title, onChangeTitle] = React.useState('Example title text');
 
-  const onPress = () =>
-    console.log('submititems', newListItems?.tasks, finalizedTasks);
+  // onpress: navigate to list screen with data that has been entered if
+  // all tasks have been finalized with correct number of characters
+  // if not, do not navigate instead render error message telling user
+  // what they should do
+
+  const onPress = () => {
+    // console.log('submititems', newListItems?.tasks, finalizedTasks);
+    navigation.push('List');
+  };
 
   if (!newListItems) return null;
   return (
