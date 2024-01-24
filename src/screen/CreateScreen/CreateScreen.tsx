@@ -76,18 +76,12 @@ const ItemView = styled.View`
   margin-top: 20px;
 `;
 
-// should only show trash icon when there is more than one list item
-
 const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
-  const {addNewListItem, newListItems, finalizedTasks} = useListContext();
+  const {addNewListItem, newListItems, setNewListItems, finalizedTasks} =
+    useListContext();
 
   const [title, onChangeTitle] = React.useState('Example title text');
   const [submitError, setSubmitError] = React.useState(false);
-
-  // onpress: navigate to list screen with data that has been entered if
-  // all tasks have been finalized with correct number of characters
-  // if not, do not navigate instead render error message telling user
-  // what they should do
 
   const listFinalized = (arr: {id: string; finalized: boolean}[]) => {
     if (arr?.every(v => v.finalized === true)) {
@@ -96,13 +90,15 @@ const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
     return false;
   };
 
+  const setTitle = () => {
+    const tempItems = {...newListItems};
+    tempItems.listName = title;
+    setNewListItems(tempItems);
+  };
+
   const onPress = () => {
-    // console.log(
-    //   'newlistitems+status1',
-    //   newListItems,
-    //   listFinalized(finalizedTasks),
-    // );
     if (listFinalized(finalizedTasks)) {
+      setTitle();
       navigation.push('List');
     }
     if (!listFinalized(finalizedTasks)) {

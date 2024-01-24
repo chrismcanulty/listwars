@@ -138,10 +138,7 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
     ListContent['finalizedTasks']
   >([]);
 
-  // const tempData = {...Data};
-
   const getListItems = useCallback(() => {
-    console.log('getlistitems', newListItems);
     setListItems(newListItems);
   }, []);
 
