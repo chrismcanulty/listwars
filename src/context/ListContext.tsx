@@ -231,9 +231,6 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
 
   const checkListCleared = useCallback((arr: List | undefined) => {
     if (arr?.tasks.every(v => v.status === 'complete')) {
-      // setListCleared(!listCleared);
-      // setListCleared(true);
-      // console.log('iscleared?', listCleared);
       return true;
     }
     return false;

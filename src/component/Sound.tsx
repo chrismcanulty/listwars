@@ -19,7 +19,7 @@ export const pencil = new Sound('pencil.mp3', Sound.MAIN_BUNDLE, error => {
 export const pencilPlayPause = () => {
   pencil.play(success => {
     if (success) {
-      console.log('successfully finished playing');
+      console.log('successfully finished playing pencil');
     } else {
       console.log('playback failed due to audio decoding errors');
     }
@@ -34,16 +34,16 @@ export const success = new Sound('success.mp3', Sound.MAIN_BUNDLE, error => {
   // when loaded successfully
   console.log(
     'duration in seconds: ' +
-      pencil.getDuration() +
+      success.getDuration() +
       'number of channels: ' +
-      pencil.getNumberOfChannels(),
+      success.getNumberOfChannels(),
   );
 });
 
 export const successPlayPause = () => {
   success.play(success => {
     if (success) {
-      console.log('successfully finished playing');
+      console.log('successfully finished playing success');
     } else {
       console.log('playback failed due to audio decoding errors');
     }

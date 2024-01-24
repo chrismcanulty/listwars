@@ -57,7 +57,17 @@ const CreateSubheader = styled.Text`
   font-size: 22px;
   text-align: center;
 `;
-
+const ErrorText = styled.Text`
+  font-family: Montserrat-Regular;
+  font-size: 16px;
+  font-weight: 500;
+  color: red;
+  position: absolute;
+`;
+const ErrorView = styled.View`
+  align-items: center;
+  position: relative;
+`;
 const ItemView = styled.View`
   display: flex;
   flex-direction: row;
@@ -72,15 +82,27 @@ const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
   const {addNewListItem, newListItems, finalizedTasks} = useListContext();
 
   const [title, onChangeTitle] = React.useState('Example title text');
+  const [submitError, setSubmitError] = React.useState(false);
 
   // onpress: navigate to list screen with data that has been entered if
   // all tasks have been finalized with correct number of characters
   // if not, do not navigate instead render error message telling user
   // what they should do
 
+  const listFinalized = (arr: {id: string; finalized: boolean}[]) => {
+    if (arr?.every(v => v.finalized === true)) {
+      return true;
+    }
+    return false;
+  };
+
   const onPress = () => {
-    // console.log('submititems', newListItems?.tasks, finalizedTasks);
-    navigation.push('List');
+    if (listFinalized(finalizedTasks)) {
+      navigation.push('List');
+    }
+    if (!listFinalized(finalizedTasks)) {
+      setSubmitError(true);
+    }
   };
 
   if (!newListItems) return null;
@@ -115,6 +137,11 @@ const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
             size={26}
           />
         </AddButton>
+        {submitError && (
+          <ErrorView>
+            <ErrorText>Please set all tasks then resubmit</ErrorText>
+          </ErrorView>
+        )}
         <Button onPress={onPress}>
           <ButtonText>Submit Form</ButtonText>
         </Button>

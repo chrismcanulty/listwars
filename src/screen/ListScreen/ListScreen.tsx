@@ -140,8 +140,7 @@ export default function ListScreen({navigation}: any) {
 
   useEffect(() => {
     getListItems();
-    isListCleared();
-  }, [getListItems, checkListCleared]);
+  }, []);
 
   return (
     <>
