@@ -125,7 +125,6 @@ export default function CreateItem({index, id}: {index: number; id: string}) {
     } else {
       const tempTasks = [...finalizedTasks];
       ensure(tempTasks.find(x => x.id === id)).finalized = true;
-      // console.log('ensure', finalizedTasks);
       setFinalizedTasks(tempTasks);
       error = false;
       setFormError(false);

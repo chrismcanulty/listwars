@@ -59,8 +59,14 @@ const TopView = styled.SafeAreaView`
 export default function ListScreen({navigation}: any) {
   const [listSuccess, setListSuccess] = useState(false);
 
-  const {newListItems, getListItems, checkListCleared, listWinner} =
-    useListContext();
+  const {
+    newListItems,
+    getListItems,
+    checkListCleared,
+    listWinner,
+    setNewListItems,
+    setFinalizedTasks,
+  } = useListContext();
 
   const listAnimatedValue = useRef(new Animated.Value(0)).current;
 
@@ -114,6 +120,20 @@ export default function ListScreen({navigation}: any) {
   const winnerMessage = listWinner(newListItems);
 
   const onPress = () => {
+    setNewListItems({
+      listName: '',
+      tasks: [
+        {
+          id: '1',
+          title: '',
+          details: '',
+          whodunnit: '',
+          status: 'incomplete',
+        },
+      ],
+    });
+    setFinalizedTasks([{id: '1', finalized: false}]);
+
     navigation.push('Create');
   };
 

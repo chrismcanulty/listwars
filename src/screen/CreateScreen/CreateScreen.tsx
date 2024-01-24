@@ -97,6 +97,11 @@ const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
   };
 
   const onPress = () => {
+    // console.log(
+    //   'newlistitems+status1',
+    //   newListItems,
+    //   listFinalized(finalizedTasks),
+    // );
     if (listFinalized(finalizedTasks)) {
       navigation.push('List');
     }
