@@ -100,7 +100,6 @@ export default function ListItem({
   item: {id, title, details, status, whodunnit},
 }: {
   item: Task;
-  checkListCleared: unknown;
 }) {
   const [listItem, setListItem] = useState({
     id,

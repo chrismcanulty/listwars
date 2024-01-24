@@ -11,7 +11,6 @@ import {
 
 import {List, Task} from '../../types/data';
 import {DefaultList} from '../data/DefaultList';
-import {Data} from '../data/MockData';
 
 export type ListContent = {
   listItems:
@@ -134,16 +133,16 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
   const [newListItems, setNewListItems] =
     useState<ListContent['newListItems']>(DefaultList);
   const [listCleared, setListCleared] = useState(false);
-
   const [errorMessage, setErrorMessage] = useState<unknown>(null);
   const [finalizedTasks, setFinalizedTasks] = useState<
     ListContent['finalizedTasks']
   >([]);
 
-  const tempData = {...Data};
+  // const tempData = {...Data};
 
   const getListItems = useCallback(() => {
-    setListItems(tempData);
+    console.log('getlistitems', newListItems);
+    setListItems(newListItems);
   }, []);
 
   const getNewListItems = useCallback(() => {
@@ -219,21 +218,25 @@ export function MyListProvider({children}: {children: React.ReactNode}) {
 
   const listClickComplete = useCallback(
     async (i: string) => {
-      const modifiedData = {...tempData};
-      const index = modifiedData.tasks.findIndex((element: Task) => {
+      const modifiedData = {...newListItems};
+      const index = modifiedData.tasks?.findIndex((element: Task) => {
         return element.id === i;
       });
       modifiedData.tasks[index].status = 'complete';
       await new Promise(resolve => setTimeout(resolve, 400));
-      setListItems(modifiedData);
+      setNewListItems(modifiedData);
     },
     [getListItems],
   );
 
   const checkListCleared = useCallback((arr: List | undefined) => {
     if (arr?.tasks.every(v => v.status === 'complete')) {
-      setListCleared(true);
+      // setListCleared(!listCleared);
+      // setListCleared(true);
+      // console.log('iscleared?', listCleared);
+      return true;
     }
+    return false;
   }, []);
 
   const listWinner = useCallback((arr: List | undefined) => {

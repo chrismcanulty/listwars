@@ -58,9 +58,8 @@ const TopView = styled.SafeAreaView`
 
 export default function ListScreen({navigation}: any) {
   const [listSuccess, setListSuccess] = useState(false);
-  const [renderTrophy, setRenderTrophy] = useState(false);
 
-  const {listItems, getListItems, checkListCleared, listCleared, listWinner} =
+  const {newListItems, getListItems, checkListCleared, listWinner} =
     useListContext();
 
   const listAnimatedValue = useRef(new Animated.Value(0)).current;
@@ -73,7 +72,8 @@ export default function ListScreen({navigation}: any) {
     }).start(() => {
       setListSuccess(true);
       successPlayPause();
-      setRenderTrophy(true);
+      animateTrophy();
+      Vibration.vibrate();
     });
   };
 
@@ -111,23 +111,19 @@ export default function ListScreen({navigation}: any) {
 
   success.setVolume(1);
 
-  const winnerMessage = listWinner(listItems);
+  const winnerMessage = listWinner(newListItems);
 
   const onPress = () => {
     navigation.push('Create');
   };
 
-  useEffect(() => {
-    getListItems();
-    checkListCleared(listItems);
+  const isListCleared = () => {
+    const cleared = checkListCleared(newListItems);
+    // console.log('listcleared?', listCleared);
 
-    if (listCleared) {
+    if (cleared) {
       moveList();
-      listWinner(listItems);
-    }
-    if (renderTrophy) {
-      animateTrophy();
-      Vibration.vibrate();
+      listWinner(newListItems);
     }
     // add listener to detect if user has navigated to IndexScreen
     const listener = navigation.addListener('focus', () => {
@@ -138,20 +134,25 @@ export default function ListScreen({navigation}: any) {
         listener.remove();
       };
     });
-  }, [navigation, getListItems, listItems, checkListCleared, renderTrophy]);
+  };
+
+  isListCleared();
+
+  useEffect(() => {
+    getListItems();
+    isListCleared();
+  }, [getListItems, checkListCleared]);
 
   return (
     <>
-      {listItems && !listSuccess && (
+      {newListItems && !listSuccess && (
         <TopView>
           <Animated.View style={[animStyle]}>
-            <ListName>{listItems?.listName}</ListName>
+            <ListName>{newListItems?.listName}</ListName>
             <ScrollView>
               <FlatList
-                data={listItems?.tasks}
-                renderItem={({item}) => (
-                  <ListItem item={item} checkListCleared={checkListCleared} />
-                )}
+                data={newListItems?.tasks}
+                renderItem={({item}) => <ListItem item={item} />}
                 keyExtractor={item => item.id}
               />
             </ScrollView>
