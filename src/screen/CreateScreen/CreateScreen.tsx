@@ -57,7 +57,17 @@ const CreateSubheader = styled.Text`
   font-size: 22px;
   text-align: center;
 `;
-
+const ErrorText = styled.Text`
+  font-family: Montserrat-Regular;
+  font-size: 16px;
+  font-weight: 500;
+  color: red;
+  position: absolute;
+`;
+const ErrorView = styled.View`
+  align-items: center;
+  position: relative;
+`;
 const ItemView = styled.View`
   display: flex;
   flex-direction: row;
@@ -66,14 +76,35 @@ const ItemView = styled.View`
   margin-top: 20px;
 `;
 
-// should only show trash icon when there is more than one list item
-
 const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
-  const {addNewListItem, newListItems} = useListContext();
+  const {addNewListItem, newListItems, setNewListItems, finalizedTasks} =
+    useListContext();
 
   const [title, onChangeTitle] = React.useState('Example title text');
+  const [submitError, setSubmitError] = React.useState(false);
 
-  const onPress = () => console.log('PRESSED!', newListItems?.tasks);
+  const listFinalized = (arr: {id: string; finalized: boolean}[]) => {
+    if (arr?.every(v => v.finalized === true)) {
+      return true;
+    }
+    return false;
+  };
+
+  const setTitle = () => {
+    const tempItems = {...newListItems};
+    tempItems.listName = title;
+    setNewListItems(tempItems);
+  };
+
+  const onPress = () => {
+    if (listFinalized(finalizedTasks)) {
+      setTitle();
+      navigation.push('List');
+    }
+    if (!listFinalized(finalizedTasks)) {
+      setSubmitError(true);
+    }
+  };
 
   if (!newListItems) return null;
   return (
@@ -107,6 +138,11 @@ const CreateScreen = ({navigation}: NativeStackHeaderProps) => {
             size={26}
           />
         </AddButton>
+        {submitError && (
+          <ErrorView>
+            <ErrorText>Please set all tasks then resubmit</ErrorText>
+          </ErrorView>
+        )}
         <Button onPress={onPress}>
           <ButtonText>Submit Form</ButtonText>
         </Button>
