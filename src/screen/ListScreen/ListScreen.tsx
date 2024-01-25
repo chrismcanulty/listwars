@@ -139,7 +139,6 @@ export default function ListScreen({navigation}: any) {
 
   const isListCleared = () => {
     const cleared = checkListCleared(newListItems);
-    // console.log('listcleared?', listCleared);
 
     if (cleared) {
       moveList();
