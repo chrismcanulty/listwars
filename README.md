@@ -1,3 +1,13 @@
+# App Overview
+
+Mobile application leveraging React Native Animation that allows users to track and update household tasks. As tasks are completed, an animation triggers to mark the task complete. Once all tasks are complete, a winner or tie is declared based on the number of tasks each assignee has completed. The user can then create a new list if desired.
+Front-end: React Native, Typescript
+Back-end: N/A
+
+# App Walkthrough
+
+https://github.com/chrismcanulty/listwars/assets/108088437/70c38f02-b528-4716-917e-3e1f67ef065b
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
